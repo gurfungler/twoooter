@@ -1,0 +1,15 @@
+models/controllers
+    twoot
+    member
+views
+    sign up
+    log in
+    main page
+    layout
+
+
+twoot
+    person/anon
+    title
+    timestamp
+    twoot
