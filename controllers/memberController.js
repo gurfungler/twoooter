@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const member = require("../models/member");
+const Member = require("../models/member");
+const passport = require("passport");
+
 // Display member create form on GET.
 exports.member_create_get = (req, res, next) => {
   res.render("sign_up", { title: "Sign up" });
@@ -23,13 +25,16 @@ exports.member_create_post = [
     .withMessage("last name must be specified.")
     .isAlphanumeric()
     .withMessage("last name has non-alphanumeric characters."),
-  body("email"),
+  body("email")
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage("Email must be specified"),
   body("password")
     .trim()
     .isLength({ min: 1 })
     .escape()
     .withMessage("password must be specified"),
-  body("status"),
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
@@ -42,7 +47,7 @@ exports.member_create_post = [
       last_name: req.body.last_name,
       email: req.body.email,
       password: req.body.password,
-      status: true,
+      status: req.body.status === "on",
     });
 
     if (!errors.isEmpty()) {
@@ -64,7 +69,16 @@ exports.member_create_post = [
   }),
 ];
 
-// Display member log in form get.
+// Display member sign in form GET.
 exports.member_sign_in_get = (req, res, next) => {
   res.render("sign_in", { title: "Sign in" });
+};
+
+// handler member sign in form POST
+exports.member_sign_in_post = (req, res, next) => {
+  console.log("here");
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/",
+  });
 };
