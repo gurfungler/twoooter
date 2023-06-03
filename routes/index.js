@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const passport = require("passport");
 const member_controller = require("../controllers/memberController");
 const twoot_controller = require("../controllers/twootController");
 
@@ -20,7 +21,11 @@ router.post("/sign_up", member_controller.member_create_post);
 router.get("/sign_in", member_controller.member_sign_in_get);
 
 //POST member signin page
-router.post("/sign_in", member_controller.member_sign_in_post);
+router.post(
+  "/sign_in",
+  passport.authenticate("local"),
+  member_controller.member_sign_in_post
+);
 
 /// twoot routes ///
 

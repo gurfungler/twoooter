@@ -6,16 +6,14 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const mongoStore = require("connect-mongo");
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const Member = require("./models/member");
-
+require("./config/passport");
+require("./config/database");
+require("dotenv").config();
 const indexRouter = require("./routes/index");
 
 var app = express();
 
 mongoose.set("strictQuery", false);
-const mongoDB = "mongodb://localhost/twoooter";
 // Creates default connection to mongoDB and logs errors
 main().catch((err) => console.log(err));
 async function main() {
@@ -27,37 +25,14 @@ const db = mongoose.connection;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-// passport shit
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const member = await Member.findOne({ email: email });
-      if (!member) {
-        return done(null, false, { message: "incorrect username" });
-      }
-      if (member.password !== password) {
-        return done(null, false, { message: "incorrect password" });
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
   })
 );
-
-// creates a session for the user to remain logged in while using twooter
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-passport.deserializeUser(async function (id, done) {
-  try {
-    const member = await Member.findById(id);
-    done(null, member);
-  } catch (err) {
-    done(err);
-  }
-});
-app.use(session({ secret: "smth?", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger("dev"));

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const bcypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const MemberSchema = new Schema({
@@ -8,6 +8,17 @@ const MemberSchema = new Schema({
   email: { type: String, required: true, minLength: 1, maxLength: 100 },
   password: { type: String, required: true, minLength: 1, maxLength: 100 },
   status: { type: Boolean, required: true },
+});
+
+MemberSchema.pre("save", async function (next) {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 //export model
