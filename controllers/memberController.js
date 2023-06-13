@@ -60,7 +60,7 @@ exports.member_create_post = [
       return;
     } else {
       // Data from form is valid.
-
+      console.log("hello");
       // Save member.
       await member.save();
       // Redirect to home.
@@ -76,7 +76,6 @@ exports.member_sign_in_get = (req, res, next) => {
 
 // handler member sign in form POST
 exports.member_sign_in_post = (req, res, next) => {
-  console.log("here");
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/",

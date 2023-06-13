@@ -6,20 +6,22 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const mongoStore = require("connect-mongo");
-require("./config/passport");
-require("./config/database");
+const passport = require("./config/passport");
+const connection = require("./config/database");
+//gives access to the .env file with using process.env.VARIABLE_NAME
 require("dotenv").config();
 const indexRouter = require("./routes/index");
 
 var app = express();
 
-mongoose.set("strictQuery", false);
-// Creates default connection to mongoDB and logs errors
-main().catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect(mongoDB);
-}
-const db = mongoose.connection;
+// const mongostore = require("connect-mongo")(session);
+// mongoose.set("strictQuery", false);
+// // Creates default connection to mongoDB and logs errors
+// main().catch((err) => console.log(err));
+// async function main() {
+//   await mongoose.connect(mongoDB);
+// }
+// const db = mongoose.connection;
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
