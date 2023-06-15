@@ -9,14 +9,12 @@ const strategy = new LocalStrategy(
   async (email, password, done) => {
     try {
       const member = await Member.findOne({ email: email });
-
       if (!member) {
         return done(null, false, { message: "incorrect username" });
       }
       if (!(await bcrypt.compare(password, member.password))) {
         return done(null, false, { message: "incorrect password" });
       }
-
       return done(null, member);
     } catch (err) {
       return done(err);

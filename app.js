@@ -14,14 +14,10 @@ const indexRouter = require("./routes/index");
 
 var app = express();
 
-// const mongostore = require("connect-mongo")(session);
-// mongoose.set("strictQuery", false);
-// // Creates default connection to mongoDB and logs errors
-// main().catch((err) => console.log(err));
-// async function main() {
-//   await mongoose.connect(mongoDB);
-// }
-// const db = mongoose.connection;
+const sessionStore = mongoStore.create({
+  mongoUrl: process.env.DB_STRING,
+  collection: "sessions",
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -32,6 +28,7 @@ app.use(
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
+    store: sessionStore,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   })
 );

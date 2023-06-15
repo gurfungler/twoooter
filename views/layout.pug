@@ -4,11 +4,16 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+  if(!user)
     ul
       li
         a(href='/sign_up') sign up
       li
         a(href='/sign_in') sign in
+  else
+    ul
+      li
+        a(href='') log out
       li
         a(href='/create_twoot') new twoot
     block content

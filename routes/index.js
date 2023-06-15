@@ -3,11 +3,10 @@ var router = express.Router();
 const passport = require("passport");
 const member_controller = require("../controllers/memberController");
 const twoot_controller = require("../controllers/twootController");
+const index_controller = require("../controllers/indexController");
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
-});
+router.get("/", index_controller.index);
 
 /// member routes ///
 
@@ -23,13 +22,29 @@ router.get("/sign_in", member_controller.member_sign_in_get);
 //POST member signin page
 router.post(
   "/sign_in",
-  passport.authenticate("local"),
+  passport.authenticate("local", { failureRedirect: "/sign_in" }),
+  function (req, res) {
+    res.redirect("/");
+  },
   member_controller.member_sign_in_post
 );
 
+//POST member signout page
+router.get("/sign_out", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    session.destroy();
+    res.redirect("/");
+  });
+});
 /// twoot routes ///
 
 //GET twoot create page
 router.get("/create_twoot", twoot_controller.twoot_create_get);
+
+//POST twoot create page
+router.post("/create_twoot", twoot_controller.twoot_create_post);
 
 module.exports = router;
