@@ -28,7 +28,7 @@ exports.twoot_create_post = [
     const errors = validationResult(req);
     // Create Member object with escaped and trimmed data
     const twoot = new Twoot({
-      username: "bob",
+      username: req.user.first_name,
       title: req.body.title,
       body: req.body.body,
       timeStamp: moment().format("MM/D/YYYY"),

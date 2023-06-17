@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const passport = require("passport");
+const session = require("express-session");
 const member_controller = require("../controllers/memberController");
 const twoot_controller = require("../controllers/twootController");
 const index_controller = require("../controllers/indexController");
@@ -35,7 +36,8 @@ router.get("/sign_out", function (req, res, next) {
     if (err) {
       return next(err);
     }
-    session.destroy();
+    console.log("hi");
+    req.session.destroy();
     res.redirect("/");
   });
 });

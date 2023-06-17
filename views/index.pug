@@ -2,4 +2,14 @@ extends layout
 
 block content
     h1= title
-    p Welcome to #{title}
+    if(first_name)
+        p Welcome #{first_name}
+        ul
+         each twoot in twoot_list
+            li
+                div #{twoot.username}
+                div #{twoot.timeStamp}
+                div #{twoot.title}
+                div #{twoot.body}
+    else
+        p Welcome to #{title}
