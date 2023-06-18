@@ -2,12 +2,12 @@ extends layout
 
 block content
     h1= title
-    if(first_name)
-        p Welcome #{first_name}
+    if(user)
+        p Welcome #{user.first_name}
         ul
          each twoot in twoot_list
             li
-                div #{twoot.username}
+                div #{user.status ? twoot.username : "anonymous"}
                 div #{twoot.timeStamp}
                 div #{twoot.title}
                 div #{twoot.body}

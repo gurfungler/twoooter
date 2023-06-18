@@ -36,7 +36,6 @@ router.get("/sign_out", function (req, res, next) {
     if (err) {
       return next(err);
     }
-    console.log("hi");
     req.session.destroy();
     res.redirect("/");
   });
